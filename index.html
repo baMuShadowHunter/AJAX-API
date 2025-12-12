@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajax</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+  <style>
+    .products{
+      display: flex;
+      /* flex-direction: column; */
+      flex-wrap: wrap;
+      gap: 10px;
+      background-color: black;
+      justify-content: center;
+      padding-top: 90px;
+      padding-bottom: 20px;
+
+
+    }
+    .jeba{
+      background-color: white;
+      color:black ;
+      padding: 3%;
+      width: 25%;
+      border-radius: 10px;
+    }
+    .discount{
+      color: green;
+    }
+    .rating{
+      background-color: green;
+      border-radius: 3px;
+      padding: 3px;
+      color: white;
+    }
+    .r-container{
+      display: flex;
+      gap: 5px;
+    }
+    .stock-container{
+      padding-top: 2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="container">
+    <div class="products" id="products"></div>
+  </section>
+
+
+
+
+  <script>
+
+    const xhr = new XMLHttpRequest()
+    xhr.open("GET", "https://dummyjson.com/products")
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        const user = JSON.parse(xhr.response)
+        let r = user.products
+        console.log(r)
+        const container = document.getElementById("products");
+
+        container.innerHTML = r.map(pro => {
+          return `
+            <div class = "jeba">
+    <img src="${pro.thumbnail}" class="product-img" alt="product-img">
+
+    <h4 class="product-title">${pro.title}</h4>
+
+    <div class = "r-container">
+      <span class="rating">
+        ${pro.rating.toFixed(1)} ★
+      </span>
+    <span class="r-count">(${pro.reviews.length})</span>
+    </div>
+
+    <div class="stock-container">
+      <span class="price">Avaliable Stock : ${pro.stock}</span>
+    </div>
+
+    <div class="price-container">
+      <span class="price">₹${pro.price}</span>
+      <span class="discount">${pro.discountPercentage}% off</span>
+    </div>
+  </div>
+            `;
+        })
+          .join("")
+      }
+    }
+    xhr.send()
+
+  </script>
+</body>
+
+</html>
